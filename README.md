@@ -6,7 +6,7 @@ The goal is to build a solid foundation in the core topics (SQL, Python, pipelin
 
 ## Projects
 
-[1. EDA](projects/1_EDA/) - Exploratory Data Analysis
+[1. EDA](project/1_EDA/) - Exploratory Data Analysis
 
 ## References
 
