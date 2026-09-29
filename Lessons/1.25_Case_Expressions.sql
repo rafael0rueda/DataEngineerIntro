@@ -74,3 +74,36 @@ SELECT
 FROM job_postings_fact
 WHERE salary_year_avg IS NOT NULL
 GROUP BY job_title_short;
+
+/*
+Conditional Calculations
+Compute a standardized_salary using yearly salary and adjusted hourly salary
+Categorize salaries into tiers of:
+   - < 75K 'Low'
+   - 75K - 150k 'Medium'
+   - >= 150k 'High'
+*/
+
+WITH salaries AS (
+   SELECT
+      job_title_short,
+      salary_hour_avg,
+      salary_year_avg,
+      CASE
+         WHEN salary_year_avg IS NOT NULL THEN salary_year_avg
+         WHEN salary_hour_avg IS NOT NULL THEN salary_hour_avg*2080
+      END AS standardized_salary
+   FROM job_postings_fact
+   WHERE salary_year_avg IS NOT NULL OR salary_hour_avg IS NOT  NULL
+)
+
+SELECT
+   *,
+   CASE
+      WHEN standardized_salary IS NULL THEN 'Missing'
+      WHEN standardized_salary < 75_000 THEN 'Low'
+      WHEN standardized_salary < 150_000 THEN 'Medium'
+      ELSE 'High'
+   END AS salary_bucket
+FROM salaries
+LIMIT 10;
